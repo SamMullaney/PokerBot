@@ -180,6 +180,3 @@ Potential future work includes:
 
 ---
 
-## Disclaimer
-
-This project is for educational and research purposes only. It is not intended for real-money gambling or use in violation of any platform's terms of service.
