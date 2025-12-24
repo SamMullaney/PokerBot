@@ -1,0 +1,58 @@
+import cv2
+
+# -----------------------------
+# CONFIG
+# -----------------------------
+CLASS_ID = 0  # poker_table
+IMAGE_PATH = r"C:\Users\xvasc\CVHW\CVHW5\tablewithbets\betandpot.png"
+
+# -----------------------------
+# STATE
+# -----------------------------
+points = []
+
+def click(event, x, y, flags, param):
+    global points
+
+    if event == cv2.EVENT_LBUTTONDOWN:
+        points.append((x, y))
+        print(f"Point clicked: ({x}, {y})")
+
+        # Once two points are clicked, compute YOLO box
+        if len(points) == 2:
+            compute_yolo_label(points)
+            points = []  # reset for next box
+
+
+def compute_yolo_label(pts):
+    (x1, y1), (x2, y2) = pts
+
+    # Ensure correct ordering
+    left   = min(x1, x2)
+    right  = max(x1, x2)
+    top    = min(y1, y2)
+    bottom = max(y1, y2)
+
+    # Image dimensions
+    h, w, _ = image.shape
+
+    # Convert to YOLO normalized format
+    x_center = ((left + right) / 2) / w
+    y_center = ((top + bottom) / 2) / h
+    width    = (right - left) / w
+    height   = (bottom - top) / h
+
+    print("\nYOLO label line:")
+    print(f"{CLASS_ID} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n")
+
+
+# -----------------------------
+# LOAD IMAGE
+# -----------------------------
+image = cv2.imread(IMAGE_PATH)
+assert image is not None, "Failed to load image"
+
+cv2.imshow("Click top-left, then bottom-right", image)
+cv2.setMouseCallback("Click top-left, then bottom-right", click)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

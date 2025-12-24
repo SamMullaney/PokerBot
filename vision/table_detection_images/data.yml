@@ -1,0 +1,6 @@
+path: table_detection_images
+train: images/train
+val: images/val
+
+names:
+  0: poker_table
