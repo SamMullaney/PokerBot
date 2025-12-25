@@ -57,3 +57,18 @@ For each table:
    │     └── Rule-based logic
    ↓
 Structured game state
+
+
+
+GTO Main Algoritms:
+
+- Ficticious Play
+- Counterfactual regret minimization
+
+These solvers only work with a certain amount of bet sizes. The more bet size intervals added the more likley the solver will "break". Computation becomes to lengthy or nearly impossible
+
+Memory issues with a solver:
+
+- must run on a cloud
+- Programming lang might have to vary for the math behind the system
+- 
