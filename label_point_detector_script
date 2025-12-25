@@ -1,15 +1,25 @@
 import cv2
+import os
 
 # -----------------------------
 # CONFIG
 # -----------------------------
 CLASS_ID = 0  # poker_table
-IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\train\clubgg1.19.png"
+IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\train\clubgg1.50.png"
+LABEL_DIR  = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\labels"
 
 # -----------------------------
 # STATE
 # -----------------------------
 points = []
+
+# Derive label file name from image name
+image_name = os.path.basename(IMAGE_PATH)
+label_name = os.path.splitext(image_name)[0] + ".txt"
+label_path = os.path.join(LABEL_DIR, label_name)
+
+# Ensure label directory exists
+os.makedirs(LABEL_DIR, exist_ok=True)
 
 def click(event, x, y, flags, param):
     global points
@@ -42,8 +52,14 @@ def compute_yolo_label(pts):
     width    = (right - left) / w
     height   = (bottom - top) / h
 
-    print("\nYOLO label line:")
-    print(f"{CLASS_ID} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n")
+    line = f"{CLASS_ID} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
+
+    # Write to label file (append mode)
+    with open(label_path, "a") as f:
+        f.write(line)
+
+    print("\nSaved YOLO label line:")
+    print(line.strip())
 
 
 # -----------------------------
@@ -57,3 +73,5 @@ cv2.imshow("Click top-left, then bottom-right", image)
 cv2.setMouseCallback("Click top-left, then bottom-right", click)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+print(f"\nLabels saved to:\n{label_path}")
