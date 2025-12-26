@@ -1,18 +1,16 @@
 import cv2
 import os
 
-# -----------------------------
 # CONFIG
-# -----------------------------
+
 CLASS_ID = 0  # poker_table
-IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\train\clubgg2.20.png"
+IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\train\clubgg4.10.png"
 LABEL_DIR  = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\labels"
 
-# -----------------------------
-# STATE
-# -----------------------------
-points = []
 
+# STATE
+
+points = []
 # Derive label file name from image name
 image_name = os.path.basename(IMAGE_PATH)
 label_name = os.path.splitext(image_name)[0] + ".txt"
