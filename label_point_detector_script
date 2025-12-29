@@ -4,8 +4,8 @@ import os
 # CONFIG
 
 CLASS_ID = 0  # poker_table
-IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\train\clubgg4.10.png"
-LABEL_DIR  = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\labels"
+IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\val\clubggval4.2.png"
+LABEL_DIR  = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\labels\val"
 
 
 # STATE
