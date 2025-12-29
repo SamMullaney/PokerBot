@@ -1,7 +1,0 @@
-path: C:/Users/xvasc/PokerBot/vision/table_detection_images
-
-train: images/train
-val: images/val
-
-nc: 1
-names: ["poker_table"]
