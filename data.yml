@@ -1,0 +1,9 @@
+path: /content/drive/MyDrive/Colab Notebooks/pokerbot/training/table_detection/
+
+
+train: images/train
+val: images/val
+
+nc: 1
+names:
+  0: poker_table
