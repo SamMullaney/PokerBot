@@ -2,17 +2,20 @@ import dxcam
 
 
 class ScreenCapture:
-    def __init__(self, fps=20, region=None):
-        self.camera = dxcam.create(output_color="BGR")
+    def __init__(self, fps=20, region=None, output_color="BGR"):
+        self.camera = dxcam.create(output_color=output_color)
         self.region = region
-        self.camera.start(target_fps=fps, region=region)
+        self.fps = fps
+        self.camera.start(target_fps=fps, region=region, video_mode=True)
 
     def get_frame(self):
         return self.camera.get_latest_frame()
     
     def stop(self):
-        self.camera.stop()
-        self.camera.release()
+        try:
+            self.camera.stop()
+        finally:
+            self.camera.release()
 
 
 
