@@ -23,15 +23,15 @@ def main():
                 continue
 
             tables = detector.detect(frame)
-            primary = detector.pick_primary(tables)
+            
 
-            annotated = draw_tables(frame, tables, highlight=primary)
+            annotated = draw_tables(frame, tables)
 
-            # Example: show a test ROI inside the primary table (for future OCR/cards)
-            # These are dummy values just to prove the ROI scaling works.
-            if primary is not None and primary.w > 0 and primary.h > 0:
-                pot_roi = primary.roi_from_rel(x_pct=0.55, y_pct=0.40, w_pct=0.12, h_pct=0.05)
-                draw_roi(annotated, pot_roi, "pot_roi(example)")
+
+            for a in tables:
+                if a is not None and a.w > 0 and a.h > 0:
+                    test_roi = a.roi_from_rel(x_pct=0.1, y_pct=0.1, w_pct=0.3, h_pct=0.2)
+                    draw_roi(annotated, test_roi, "test_roi")
 
             key = viewer.show(annotated)
             viewer.log_fps()

@@ -4,7 +4,8 @@ from state.table_state import TableBox
 
 
 class TableDetector:
-    def __init__(self, model_path: str, conf_thres: float = 0.35, device: str = "cpu"):
+    #Test confidence thresholds. Seems very low
+    def __init__(self, model_path: str, conf_thres: float = 0.7, device: str = "cpu"):
         self.model = YOLO(model_path)
         self.conf_thres = conf_thres
         self.device = device
@@ -29,12 +30,3 @@ class TableDetector:
         # Optional: sort left-to-right then top-to-bottom (useful when multiple tables)
         tables.sort(key=lambda t: (t.y1, t.x1))
         return tables
-
-    @staticmethod
-    def pick_primary(tables: List[TableBox]) -> Optional[TableBox]:
-        """
-        Picks the 'main' table (largest area). Good default for MVP.
-        """
-        if not tables:
-            return None
-        return max(tables, key=lambda t: t.w * t.h)

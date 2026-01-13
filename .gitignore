@@ -1,0 +1,22 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.env/
+
+# Environment files
+.env
+
+# Model weights (optional)
+models/*.pt
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
