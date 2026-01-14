@@ -30,8 +30,10 @@ def main():
 
             for a in tables:
                 if a is not None and a.w > 0 and a.h > 0:
-                    test_roi = a.roi_from_rel(x_pct=0.1, y_pct=0.1, w_pct=0.3, h_pct=0.2)
-                    draw_roi(annotated, test_roi, "test_roi")
+                    player_card_1_roi = a.roi_from_rel(x_pct=0.43972, y_pct=0.74722, w_pct=0.02955, h_pct=0.0779)
+                    draw_roi(annotated, player_card_1_roi, "player_card_1_roi")
+                    player_card_2_roi = a.roi_from_rel(x_pct=0.48818, y_pct=0.74722, w_pct=0.03073, h_pct=0.0779)
+                    draw_roi(annotated, player_card_2_roi, "player_card_2_roi")
 
             key = viewer.show(annotated)
             viewer.log_fps()

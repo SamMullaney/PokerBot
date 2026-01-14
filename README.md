@@ -72,3 +72,35 @@ Memory issues with a solver:
 - must run on a cloud
 - Programming lang might have to vary for the math behind the system
 - 
+
+
+
+table_x1 = 696
+table_y1 = 186
+table_x2 = 1542
+table_y2 = 815
+
+table_w = 846
+table_h = 629
+
+player_card_one_x1 = 1068
+player_car_one_y1 = 656
+player_card_one_x2 = 1093
+player_card_one_y2 = 705
+
+player_card_two_x1 = 1109
+player_card_two_y1 = 656
+player_card_two_x2 = 1135
+player_card_two_y2 = 706
+
+- First Player card bboxes percentages
+x_pct = (pcox1 - tablex1) / table_w = 0.43972
+y_pct = (pcoy1 - tabley1) / table_h = 0.74722
+w_pct = (pcox2 - pcox1) / table_w = 0.02955
+h_pct = (pcoy2 - pcoy1) / table_h = 0.0779
+
+- Second player card bboxes percentages
+x_pct = 0.48818
+y_pct = 0.74722
+w_pct = 0.03073
+h_pct = 0.0779

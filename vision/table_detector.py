@@ -5,7 +5,7 @@ from state.table_state import TableBox
 
 class TableDetector:
     #Test confidence thresholds. Seems very low
-    def __init__(self, model_path: str, conf_thres: float = 0.7, device: str = "cpu"):
+    def __init__(self, model_path: str, conf_thres: float = 0.8, device: str = "cpu"):
         self.model = YOLO(model_path)
         self.conf_thres = conf_thres
         self.device = device
