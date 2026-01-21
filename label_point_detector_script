@@ -2,37 +2,25 @@ import cv2
 import os
 
 # CONFIG
-
-CLASS_ID = 0  # poker_table
-IMAGE_PATH = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\images\train\clubgg4.04.png"
-LABEL_DIR  = r"C:\Users\xvasc\PokerBot\vision\table_detection_images\labels\val"
-
+IMAGE_PATH = r"C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\2players.png"
 
 # STATE
-
 points = []
-# Derive label file name from image name
-image_name = os.path.basename(IMAGE_PATH)
-label_name = os.path.splitext(image_name)[0] + ".txt"
-label_path = os.path.join(LABEL_DIR, label_name)
-
-# Ensure label directory exists
-os.makedirs(LABEL_DIR, exist_ok=True)
 
 def click(event, x, y, flags, param):
     global points
 
     if event == cv2.EVENT_LBUTTONDOWN:
         points.append((x, y))
-        print(f"Point clicked: ({x}, {y})")
+        print(f"Point {len(points)}: ({x}, {y})")
 
-        # Once two points are clicked, compute YOLO box
+        # Once two points are clicked, print table coords
         if len(points) == 2:
-            compute_yolo_label(points)
+            print_table_coords(points)
             points = []  # reset for next box
 
 
-def compute_yolo_label(pts):
+def print_table_coords(pts):
     (x1, y1), (x2, y2) = pts
 
     # Ensure correct ordering
@@ -41,28 +29,18 @@ def compute_yolo_label(pts):
     top    = min(y1, y2)
     bottom = max(y1, y2)
 
-    # Image dimensions
-    h, w, _ = image.shape
-
-    # Convert to YOLO normalized format
-    x_center = ((left + right) / 2) / w
-    y_center = ((top + bottom) / 2) / h
-    width    = (right - left) / w
-    height   = (bottom - top) / h
-
-    line = f"{CLASS_ID} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
-
-    # Write to label file (append mode)
-    with open(label_path, "a") as f:
-        f.write(line)
-
-    print("\nSaved YOLO label line:")
-    print(line.strip())
+    print("\n" + "="*40)
+    print("TABLE COORDINATES:")
+    print(f"x1 = {left}")
+    print(f"y1 = {top}")
+    print(f"x2 = {right}")
+    print(f"y2 = {bottom}")
+    print(f"width = {right - left}")
+    print(f"height = {bottom - top}")
+    print("="*40 + "\n")
 
 
-# -----------------------------
-# LOAD IMAGE
-# -----------------------------
+# Load image
 image = cv2.imread(IMAGE_PATH)
 assert image is not None, "Failed to load image"
 
@@ -71,5 +49,3 @@ cv2.imshow("Click top-left, then bottom-right", image)
 cv2.setMouseCallback("Click top-left, then bottom-right", click)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-print(f"\nLabels saved to:\n{label_path}")

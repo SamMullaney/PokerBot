@@ -104,3 +104,16 @@ x_pct = 0.48818
 y_pct = 0.74722
 w_pct = 0.03073
 h_pct = 0.0779
+
+
+
+
+Player position possible rois:
+
+table_x1 = 
+table_y1 =
+table_x2 = 
+table_y2 = 
+
+table_w = 
+table_h = 

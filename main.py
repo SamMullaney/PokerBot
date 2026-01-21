@@ -1,6 +1,7 @@
 from capture.screen_capture import ScreenCapture
 from vision.table_detector import TableDetector
-from vision.draw import draw_tables, draw_roi
+from vision.player_detector import PlayerDetector
+from vision.draw import draw_tables, draw_roi, draw_players
 from app.debug_viewer import DebugViewer
 import config
 
@@ -11,6 +12,11 @@ def main():
         model_path=config.MODEL_TABLE_PATH,
         conf_thres=config.CONF_THRES,
         device=config.DEVICE
+    )
+    player_detector = PlayerDetector(
+        edge_ratio_threshold=0.1,
+        laplacian_var_threshold=100.0,
+        nms_overlap_threshold=0.45
     )
     viewer = DebugViewer(config.WINDOW_NAME)
 
@@ -24,16 +30,18 @@ def main():
 
             tables = detector.detect(frame)
             
-
             annotated = draw_tables(frame, tables)
 
-
-            for a in tables:
-                if a is not None and a.w > 0 and a.h > 0:
-                    player_card_1_roi = a.roi_from_rel(x_pct=0.43972, y_pct=0.74722, w_pct=0.02955, h_pct=0.0779)
-                    draw_roi(annotated, player_card_1_roi, "player_card_1_roi")
-                    player_card_2_roi = a.roi_from_rel(x_pct=0.48818, y_pct=0.74722, w_pct=0.03073, h_pct=0.0779)
-                    draw_roi(annotated, player_card_2_roi, "player_card_2_roi")
+            for table in tables:
+                if table is not None and table.w > 0 and table.h > 0:
+                    # Draw table ROIs
+                    for roi_name, (x_pct, y_pct, w_pct, h_pct) in config.TABLE_ROIS.items():
+                        roi = table.roi_from_rel(x_pct=x_pct, y_pct=y_pct, w_pct=w_pct, h_pct=h_pct)
+                        draw_roi(annotated, roi, roi_name)
+                    
+                    # Detect and draw players
+                    players = player_detector.detect(frame, table)
+                    draw_players(annotated, players, color=(0, 165, 255))  # Orange color for players
 
             key = viewer.show(annotated)
             viewer.log_fps()
