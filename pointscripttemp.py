@@ -15,12 +15,11 @@ TABLE_W = TABLE_X2 - TABLE_X1
 TABLE_H = TABLE_Y2 - TABLE_Y1
 
 # IMAGE_PATH to calibrate against
-IMAGE_PATH = "C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\9players.png"
+IMAGE_PATH = "C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\9playersseat16.png"
 
 img = cv2.imread(IMAGE_PATH)
 if img is None:
     raise FileNotFoundError(f"Could not load image: {IMAGE_PATH}")
-
 display = img.copy()
 clicks = []
 
