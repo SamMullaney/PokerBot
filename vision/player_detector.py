@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-from typing import List, Tuple
-from dataclasses import dataclass
+from typing import List, Tuple, Dict, Optional
+from dataclasses import dataclass, field
 import config
 
 
@@ -18,6 +18,7 @@ class PlayerSeat:
     laplacian_var: float
     confidence: float  # occupancy confidence score
     is_occupied: bool
+    rois: Dict[str, Tuple[int, int, int, int]] = field(default_factory=dict)  # additional ROIs for occupied seats
     
     @property
     def center(self) -> Tuple[int, int]:
@@ -248,7 +249,12 @@ class PlayerDetector:
         """
         candidates = []
         
-        for seat_idx, (seat_name, (x_pct, y_pct, w_pct, h_pct)) in enumerate(self.seat_coords.items()):
+        for seat_idx, (seat_name, seat_data) in enumerate(self.seat_coords.items()):
+            # Extract occupancy coordinates from nested dictionary
+            if isinstance(seat_data, dict):
+                x_pct, y_pct, w_pct, h_pct = seat_data["occupancy"]
+            else:
+                x_pct, y_pct, w_pct, h_pct = seat_data
             # Get pixel coordinates from relative coordinates
             x1, y1, x2, y2 = table_box.roi_from_rel(x_pct, y_pct, w_pct, h_pct)
             
@@ -271,6 +277,21 @@ class PlayerDetector:
             is_occupied = (edge_ratio > self.edge_ratio_threshold and 
                           laplacian_var > self.laplacian_var_threshold)
             
+            # Extract additional ROIs from the seat data dictionary
+            additional_rois = {}
+            if isinstance(seat_data, dict) and is_occupied:
+                for roi_key, roi_coords in seat_data.items():
+                    if roi_key != "occupancy":  # Skip the occupancy key
+                        roi_x1, roi_y1, roi_x2, roi_y2 = table_box.roi_from_rel(
+                            roi_coords[0], roi_coords[1], roi_coords[2], roi_coords[3]
+                        )
+                        # Clip to frame boundaries
+                        roi_x1 = max(0, min(roi_x1, frame.shape[1]))
+                        roi_x2 = max(0, min(roi_x2, frame.shape[1]))
+                        roi_y1 = max(0, min(roi_y1, frame.shape[0]))
+                        roi_y2 = max(0, min(roi_y2, frame.shape[0]))
+                        additional_rois[roi_key] = (roi_x1, roi_y1, roi_x2, roi_y2)
+            
             player = PlayerSeat(
                 seat_name=seat_name,
                 seat_id=seat_idx,
@@ -281,7 +302,8 @@ class PlayerDetector:
                 edge_ratio=edge_ratio,
                 laplacian_var=laplacian_var,
                 confidence=confidence,
-                is_occupied=is_occupied
+                is_occupied=is_occupied,
+                rois=additional_rois
             )
             candidates.append(player)
         

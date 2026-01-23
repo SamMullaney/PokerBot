@@ -6,16 +6,16 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # These need to be set to your table boundaries (from first roi calibration)
-TABLE_X1 = 537
-TABLE_Y1 = 199
-TABLE_X2 = 1385
-TABLE_Y2 = 832
+TABLE_X1 = 565
+TABLE_Y1 = 235
+TABLE_X2 = 1416
+TABLE_Y2 = 868
 
 TABLE_W = TABLE_X2 - TABLE_X1
 TABLE_H = TABLE_Y2 - TABLE_Y1
 
 # IMAGE_PATH to calibrate against
-IMAGE_PATH = "C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\9playersseat16.png"
+IMAGE_PATH = "C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\7playersseat12.png"
 
 img = cv2.imread(IMAGE_PATH)
 if img is None:

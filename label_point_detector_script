@@ -2,7 +2,7 @@ import cv2
 import os
 
 # CONFIG
-IMAGE_PATH = r"C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\2players.png"
+IMAGE_PATH = r"C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\5playersseat6.png"
 
 # STATE
 points = []
