@@ -19,7 +19,7 @@ def main():
         laplacian_var_threshold=100.0,
         nms_overlap_threshold=0.45
     )
-    card_model_path = "vision/models/tiny_corner_net_best_cardv3.pt"
+    card_model_path = "vision/models/tiny_corner_net_best_cardv4.pt"
     card_clf = CardClassifier(weights_path=card_model_path, device="cpu")  # or "cuda"
 
     viewer = DebugViewer(config.WINDOW_NAME)
