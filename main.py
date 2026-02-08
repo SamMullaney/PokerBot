@@ -7,20 +7,31 @@ from app.debug_viewer import DebugViewer
 import config
 import cv2
 
+
+
 def main():
-    cap = ScreenCapture(fps=config.CAPTURE_FPS, region=config.CAPTURE_REGION, output_color="BGR")
+
+    cap = ScreenCapture(
+        fps=config.CAPTURE_FPS, 
+        region=config.CAPTURE_REGION, 
+        output_color="BGR"
+    )
+    
     detector = TableDetector(
         model_path=config.MODEL_TABLE_PATH,
-        conf_thres=config.CONF_THRES,
+        conf_thres=config.TABLE_CONF_THRES,
         device=config.DEVICE
     )
+
     player_detector = PlayerDetector(
-        edge_ratio_threshold=0.1,
-        laplacian_var_threshold=100.0,
-        nms_overlap_threshold=0.45
+        edge_ratio_threshold=config.EDGE_RATIO_THRESHOLD,
+        laplacian_var_threshold=config.LAPLACIAN_VAR_THRESHOLD,
+        nms_overlap_threshold=config.NMS_OVERLAP_THRESHOLD
     )
+
     card_model_path = "vision/models/tiny_corner_net_best_cardv4.pt"
-    card_clf = CardClassifier(weights_path=card_model_path, device="cpu")  # or "cuda"
+
+    card_clf = CardClassifier(weights_path=card_model_path, device="cpu")
 
     viewer = DebugViewer(config.WINDOW_NAME)
 
@@ -31,28 +42,30 @@ def main():
             frame = cap.get_frame()
             if frame is None:
                 continue
-
+            
+            # YOLO table detection model on each frame captured
             tables = detector.detect(frame)
             
+            # Outline each table (green)
             annotated = draw_tables(frame, tables)
             all_detected_cards = {}
 
             for table in tables:
                 if table is not None and table.w > 0 and table.h > 0:
-                    # Draw table ROIs
-                    for roi_name, (x_pct, y_pct, w_pct, h_pct) in config.TABLE_ROIS.items():
-                        roi = table.roi_from_rel(x_pct=x_pct, y_pct=y_pct, w_pct=w_pct, h_pct=h_pct)
-                        draw_roi(annotated, roi, roi_name)
                     
-                    # Detect and draw players
+                    
                     players = player_detector.detect(frame, table)
-                    draw_players(annotated, players, color=(0, 165, 255))  # Orange color for players
+                    draw_players(annotated, players, color=(0, 165, 255)) 
                     
                     # Detect cards in player and community card ROIs
                     for roi_name, (x_pct, y_pct, w_pct, h_pct) in config.TABLE_ROIS.items():
                         if "card" in roi_name:
                             x1, y1, x2, y2 = table.roi_from_rel(x_pct=x_pct, y_pct=y_pct, w_pct=w_pct, h_pct=h_pct)
                             
+                            # Draw the ROIs
+                            roi = table.roi_from_rel(x_pct=x_pct, y_pct=y_pct, w_pct=w_pct, h_pct=h_pct)
+                            draw_roi(annotated, roi, roi_name)
+
                             # Extract the card region from the frame
                             if x1 >= 0 and y1 >= 0 and x2 <= frame.shape[1] and y2 <= frame.shape[0]:
                                 card_region = frame[y1:y2, x1:x2]
@@ -62,8 +75,7 @@ def main():
                                     prediction = card_clf.predict_corner(card_region)
                                     
                                     # Apply confidence threshold
-                                    CONFIDENCE_THRESHOLD = 0.6
-                                    if prediction.card_conf < CONFIDENCE_THRESHOLD:
+                                    if prediction.card_conf < config.CARD_CONF_THRES:
                                         label = "NO_CARD"
                                         card_conf = prediction.card_conf
                                     else:

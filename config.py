@@ -8,16 +8,27 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEVICE = os.getenv("DEVICE", "cpu")
 
 # Table confidence threshold
-CONF_THRES = float(os.getenv("CONF_THRES", 0.7))
+TABLE_CONF_THRES = float(os.getenv("CONF_THRES", 0.7))
+
+# Card confidence threshold
+CARD_CONF_THRES = 0.6
 
 MODEL_TABLE_PATH = os.path.join(
     BASE_DIR,
     os.getenv("MODEL_TABLE_PATH", "vision/models/table_detector_v1.pt")
 )
 
+# Screen Capture Vars
 CAPTURE_FPS = int(os.getenv("CAPTURE_FPS", 30))
 CAPTURE_REGION = None
 WINDOW_NAME = "PokerBot Debug (q to quit)"
+
+# Player Detection Vars
+EDGE_RATIO_THRESHOLD = 0.1
+LAPLACIAN_VAR_THRESHOLD = 100.0
+NMS_OVERLAP_THRESHOLD = 0.45
+
+
 
 TABLE_ROIS = {
     "player_card_1": (0.43972, 0.74722, 0.02955, 0.0779),
