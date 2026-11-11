@@ -158,6 +158,12 @@ python -m tools.test_table_detection
 
 ---
 
+## Contributing
+
+Work on a separate branch for each change, commit in small steps with clear messages, test before you merge, and merge into `main` when finished. The full rules, written for both people and AI assistants, are in [AGENTS.md](AGENTS.md). [CLAUDE.md](CLAUDE.md) points Claude Code to the same file. For development, install `requirements-dev.txt` instead of `requirements.txt`.
+
+---
+
 ## Roadmap
 
 - [ ] OCR for pot, stack and bet regions
