@@ -1,8 +1,18 @@
-import cv2
-import os
+"""
+Measure a table's pixel bounding box on a screenshot.
 
-# CONFIG
-IMAGE_PATH = r"C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\5playersseat6.png"
+Click the table's top-left corner, then its bottom-right corner; the
+coordinates are printed. Feed them to tools/calibrate_rois.py.
+
+Usage (from the project root):
+    python -m tools.measure_table_bounds path/to/screenshot.png
+"""
+import argparse
+import cv2
+
+parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument("image", help="Path to a screenshot of the poker client")
+IMAGE_PATH = parser.parse_args().image
 
 # STATE
 points = []
@@ -42,7 +52,8 @@ def print_table_coords(pts):
 
 # Load image
 image = cv2.imread(IMAGE_PATH)
-assert image is not None, "Failed to load image"
+if image is None:
+    raise FileNotFoundError(f"Could not load image: {IMAGE_PATH}")
 
 cv2.namedWindow("Click top-left, then bottom-right", cv2.WINDOW_NORMAL)
 cv2.imshow("Click top-left, then bottom-right", image)

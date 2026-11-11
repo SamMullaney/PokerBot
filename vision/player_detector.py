@@ -4,7 +4,7 @@ from typing import List, Tuple, Dict, Optional
 from dataclasses import dataclass, field
 import config
 
-
+ 
 @dataclass
 class PlayerSeat:
     """Represents a detected player seat"""

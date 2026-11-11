@@ -1,0 +1,15 @@
+# PokerBot runtime dependencies (Windows, Python 3.10+; developed on 3.13)
+#
+# PyTorch: the line below installs the default build from PyPI (CPU on Windows).
+# For an NVIDIA GPU, install the CUDA build first, e.g.:
+#   pip install torch==2.9.1 torchvision==0.24.1 --index-url https://download.pytorch.org/whl/cu126
+# then run `pip install -r requirements.txt`.
+
+torch==2.9.1
+torchvision==0.24.1
+ultralytics==8.3.241
+opencv-python==4.12.0.88
+numpy==2.2.6
+pillow==11.3.0
+dxcam==0.0.5
+python-dotenv==1.2.1

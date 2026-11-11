@@ -53,8 +53,6 @@ class DebugViewer:
         Args:
             detected_cards: Dictionary of detected cards
         """
-        from vision.card_detector import CardClassifier
-        
         # Create debug panel
         panel_width = 400
         panel_height = 600

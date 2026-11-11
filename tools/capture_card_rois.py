@@ -1,6 +1,11 @@
 """
-Script to capture screenshots of card ROIs only.
-Saves player and community card regions to files when triggered.
+Capture card ROI crops from the live screen for CNN training data.
+
+Saves every player/community card region of each detected table into a
+timestamped folder under config.CAPTURED_CARDS_DIR (default: data/captured_cards).
+
+Usage (from the project root):
+    python -m tools.capture_card_rois
 """
 
 import cv2
@@ -15,7 +20,7 @@ import config
 class CardROICapture:
     """Captures and saves card ROI screenshots on demand."""
     
-    def __init__(self, output_dir: str = "captured_cards"):
+    def __init__(self, output_dir: str = config.CAPTURED_CARDS_DIR):
         """
         Initialize the card ROI capture system.
         
@@ -33,7 +38,7 @@ class CardROICapture:
         )
         self.detector = TableDetector(
             model_path=config.MODEL_TABLE_PATH,
-            conf_thres=config.CONF_THRES,
+            conf_thres=config.TABLE_CONF_THRES,
             device=config.DEVICE
         )
         

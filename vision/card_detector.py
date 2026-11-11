@@ -1,4 +1,4 @@
-# vision/card_classifier.py
+"""Tiny CNN that classifies a cropped card corner into rank + suit."""
 from dataclasses import dataclass
 from typing import Tuple, Optional
 import torch
