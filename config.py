@@ -1,22 +1,41 @@
+"""
+Central configuration for PokerBot.
+
+Machine-specific settings (device, model paths, thresholds) can be overridden
+in a local `.env` file -- see `.env.example`. Table/seat ROI geometry lives
+here because it is tied to the poker client layout, not the machine.
+"""
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+
+def _path(env_name: str, default: str) -> str:
+    """Resolve a path from the environment, relative to the project root."""
+    return os.path.join(BASE_DIR, os.getenv(env_name, default))
+
+
+# --- Hardware ---
+# Device for the YOLO table detector ("cpu", "cuda", "cuda:0", ...)
 DEVICE = os.getenv("DEVICE", "cpu")
+# Device for the card classifier (tiny CNN; CPU is fast enough)
+CARD_DEVICE = os.getenv("CARD_DEVICE", "cpu")
 
-# Table confidence threshold
-TABLE_CONF_THRES = float(os.getenv("CONF_THRES", 0.7))
+# --- Models ---
+MODEL_TABLE_PATH = _path("MODEL_TABLE_PATH", "vision/models/table_detector_v1.pt")
+MODEL_CARD_PATH = _path("MODEL_CARD_PATH", "vision/models/tiny_corner_net_best_cardv4.pt")
 
-# Card confidence threshold
-CARD_CONF_THRES = 0.6
+# --- Confidence thresholds ---
+# TABLE_CONF_THRES is preferred; CONF_THRES is accepted for older .env files.
+TABLE_CONF_THRES = float(os.getenv("TABLE_CONF_THRES", os.getenv("CONF_THRES", 0.7)))
+CARD_CONF_THRES = float(os.getenv("CARD_CONF_THRES", 0.6))
 
-MODEL_TABLE_PATH = os.path.join(
-    BASE_DIR,
-    os.getenv("MODEL_TABLE_PATH", "vision/models/table_detector_v1.pt")
-)
+# --- Output ---
+# Where tools/capture_card_rois.py saves training crops
+CAPTURED_CARDS_DIR = _path("CAPTURED_CARDS_DIR", "data/captured_cards")
 
 # Screen Capture Vars
 CAPTURE_FPS = int(os.getenv("CAPTURE_FPS", 30))

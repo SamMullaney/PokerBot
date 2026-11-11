@@ -1,21 +1,30 @@
+"""
+Calibrate table-relative ROIs for config.py.
+
+Click the top-left then bottom-right corner of each region on a screenshot.
+Each pair is printed as (x_pct, y_pct, w_pct, h_pct) relative to the table
+bounds, ready to paste into TABLE_ROIS / SEAT_ROIS. Press 'q' to finish.
+
+Get the table bounds first with tools/measure_table_bounds.py.
+
+Usage (from the project root):
+    python -m tools.calibrate_rois path/to/screenshot.png --table X1 Y1 X2 Y2
+"""
+import argparse
 import cv2
-import sys
-import os
 
-# Add parent directory to path to import config
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument("image", help="Path to a screenshot of the poker client")
+parser.add_argument("--table", nargs=4, type=int, required=True,
+                    metavar=("X1", "Y1", "X2", "Y2"),
+                    help="Table bounding box in pixels (from measure_table_bounds)")
+args = parser.parse_args()
 
-# These need to be set to your table boundaries (from first roi calibration)
-TABLE_X1 = 565
-TABLE_Y1 = 235
-TABLE_X2 = 1416
-TABLE_Y2 = 868
-
+TABLE_X1, TABLE_Y1, TABLE_X2, TABLE_Y2 = args.table
 TABLE_W = TABLE_X2 - TABLE_X1
 TABLE_H = TABLE_Y2 - TABLE_Y1
 
-# IMAGE_PATH to calibrate against
-IMAGE_PATH = "C:\\Users\\xvasc\\OneDrive\\Pictures\\Screenshots\\7playersseat12.png"
+IMAGE_PATH = args.image
 
 img = cv2.imread(IMAGE_PATH)
 if img is None:

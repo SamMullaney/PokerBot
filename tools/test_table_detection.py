@@ -1,13 +1,19 @@
+"""
+Standalone live test of the YOLO table detector (no cards/players).
+
+Usage (from the project root):
+    python -m tools.test_table_detection
+"""
 import time
 import cv2
-import numpy as np
 import dxcam
 from ultralytics import YOLO
+import config
 
 # -----------------------------
 # CONFIG
 # -----------------------------
-MODEL_PATH = r"vision\models\table_detector_v1.pt"
+MODEL_PATH = config.MODEL_TABLE_PATH
 WINDOW_NAME = "PokerBot Live (press q to quit)"
 CONF_THRES = 0.35
 TARGET_FPS = 30  # lower = easier to use desktop while testing

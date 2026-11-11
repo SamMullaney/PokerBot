@@ -1,22 +1,32 @@
-# Python bytecode
+# Python bytecode / build
 __pycache__/
 *.py[cod]
+*.egg-info/
+build/
+dist/
 
 # Virtual environments
+.venv/
 venv/
-.env/
+env/
 
-# Environment files
+# Secrets / local config (commit .env.example instead)
 .env
+.env.*
+!.env.example
 
-# Model weights (optional)
-models/*.pt
+# Generated data (training crops, screenshots, YOLO runs)
+data/
+captured_cards/
+runs/
 
 # Logs
 *.log
 
+# Editors
+.vscode/
+.idea/
+
 # OS files
 .DS_Store
 Thumbs.db
-
-

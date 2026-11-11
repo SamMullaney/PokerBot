@@ -29,9 +29,10 @@ def main():
         nms_overlap_threshold=config.NMS_OVERLAP_THRESHOLD
     )
 
-    card_model_path = "vision/models/tiny_corner_net_best_cardv4.pt"
-
-    card_clf = CardClassifier(weights_path=card_model_path, device="cpu")
+    card_clf = CardClassifier(
+        weights_path=config.MODEL_CARD_PATH,
+        device=config.CARD_DEVICE
+    )
 
     viewer = DebugViewer(config.WINDOW_NAME)
 
